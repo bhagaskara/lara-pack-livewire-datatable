@@ -125,7 +125,9 @@
                 <div class="w-100 h-100" style="background-color: grey; opacity:0.2"></div>
             </div>
             <h5 class="position-absolute shadow bg-white p-2 rounded"
-                style="top: 50%;left: 50%;transform: translate(-50%, -50%);">Loading...</h5>
+                style="top: 50%;left: 50%;transform: translate(-50%, -50%);">
+                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Loading...
+            </h5>
         </div>
 
         <div class="table-responsive">
