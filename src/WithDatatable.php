@@ -15,9 +15,11 @@ trait WithDatatable
     public $sortBy = '';
     public $sortDirection = 'asc';
     public $loading = true;
+
     public $showKeywordFilter = true;
     public $showSelectPageLength = true;
     public $showTotalData = true;
+    public $textWrap = false;
 
     abstract public function datatableColumns(): array;
     abstract public function datatableQuery();
@@ -43,6 +45,7 @@ trait WithDatatable
     public function mount()
     {
         $this->paginationTheme = config('livewire-datatable.pagination_theme');
+        $this->textWrap = config('livewire-datatable.table_content_text_wrap');
 
         $columns = $this->datatableColumns();
         if ('' == $this->sortBy && count($columns) > 0) {
