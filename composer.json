@@ -1,0 +1,28 @@
+{
+    "name": "lara-pack/livewire-datatable",
+    "description": "Livewire Component : Datatable",
+    "license": "MIT",
+    "require": {
+        "livewire/livewire": "^3.0",
+        "barryvdh/laravel-dompdf": "^3.1",
+        "maatwebsite/excel": "^3.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "LaraPack\\LivewireDatatable\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Bhagaskara",
+            "email": "bhagaskaraliancer@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "LaraPack\\LivewireDatatable\\LivewireDatatableProvider"
+            ]
+        }
+    }
+}
