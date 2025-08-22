@@ -23,6 +23,6 @@ class LivewireDatatableProvider extends ServiceProvider
         // Publish the package's config file to the application's config directory
         $this->publishes([
             __DIR__ . '/../config/livewire-datatable.php' => config_path('livewire-datatable.php'),
-        ], 'config'); // 'config' is a tag for publishing
+        ], 'lara-pack/livewire-datatable');
     }
 }
