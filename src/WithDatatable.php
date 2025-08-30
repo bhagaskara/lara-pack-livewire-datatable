@@ -11,11 +11,16 @@ trait WithDatatable
 
     public $lengthOptions = [10, 25, 50, 100];
     public $length = 10;
-    public $search;
     public $sortBy = '';
     public $sortDirection = 'asc';
     public $loading = true;
 
+    // Config : Filter
+    public $search;
+    public $filterGlobal = [];
+    public $filterColumn = [];
+
+    // Config : View
     public $showKeywordFilter = true;
     public $showSelectPageLength = true;
     public $showTotalData = true;
@@ -44,20 +49,65 @@ trait WithDatatable
 
     public function mount()
     {
+        $this->datatableMount();
+
         $this->paginationTheme = config('livewire-datatable.pagination_theme');
         $this->textWrap = config('livewire-datatable.table_content_text_wrap');
 
         $columns = $this->datatableColumns();
-        if ('' == $this->sortBy && count($columns) > 0) {
-            foreach ($columns as $col) {
-                if (!isset($col['sortable']) || $col['sortable']) {
-                    $this->sortBy = $col['key'];
-                    break;
+        foreach ($columns as $indexCol => $col) {
+            // Default Sort By
+            if ((!isset($col['sortable']) || $col['sortable']) && empty($this->sortBy)) {
+                $this->sortBy = $col['key'];
+            }
+
+            // Init Filter
+            if (!isset($col['searchable']) || $col['searchable']) {
+                // Init Filter : Global
+                if (isset($col['key'])) {
+                    $this->filterGlobal[] = $col['key'];
+                }
+
+                // Init Filter : Columns
+                if (isset($col['filter'])) {
+                    if (is_array($col['filter'])) {
+                        if ((!isset($col['key']) || empty($col['key'])) && (!isset($col['filter']['query']) || !is_callable($col['filter']['query']))) {
+                            continue;
+                        }
+
+                        $this->filterColumn[$indexCol] = [
+                            'type' => $col['filter']['type'],
+                            'value' => $col['filter']['value'] ?? null,
+                            'placeholder' => $col['filter']['placeholder'] ?? 'Cari...',
+                            'key' => $col['key'] ?? null,
+                            'query' => $col['filter']['query'] ? true : false,
+
+                            // Select / Select2
+                            'options' => $col['filter']['options'] ?? [],
+                            'url' => $col['filter']['url'] ?? '',
+                            'multiple' => $col['filter']['multiple'] ?? false,
+                        ];
+                    } else {
+                        if (!isset($col['key'])) {
+                            continue;
+                        }
+
+                        $this->filterColumn[$indexCol] = [
+                            'type' => $col['filter'],
+                            'value' => '',
+                            'placeholder' => 'Cari...',
+                            'key' => $col['key'],
+                            'query' => false,
+
+                            // Select / Select2
+                            'options' => [],
+                            'url' => '',
+                            'multiple' => false,
+                        ];
+                    }
                 }
             }
         }
-
-        $this->datatableMount();
     }
 
     public function updatingSearch()
@@ -96,27 +146,38 @@ trait WithDatatable
 
     public function datatableProcessedQuery()
     {
-        $columns = $this->datatableColumns();
         $query = $this->datatableQuery();
-        $search = $this->search;
-        $sortBy = $this->sortBy;
-        $sortDirection = $this->sortDirection;
 
-        $query->when($search, function ($query) use ($search, $columns) {
-            $query->where(function ($query) use ($columns, $search) {
-                foreach ($columns as $col) {
-                    if (
-                        isset($col['key'])
-                        && (!isset($col['searchable']) || (isset($col['searchable']) && $col['searchable']))
-                    ) {
-                        $query->orWhere($col['key'], config('livewire-datatable.query_wildcard_operator'), "%$search%");
+        // Filter : Global
+        $query->when($this->search, function ($query) {
+            $query->where(function ($query) {
+                foreach ($this->filterGlobal as $key) {
+                    $query->orWhere($key, config('livewire-datatable.query_wildcard_operator'), "%{$this->search}%");
+                }
+            });
+        });
+
+        // Filter : Column
+        $query->when(count($this->filterColumn), function ($query) {
+            $query->where(function ($query) {
+                $datatableColumns = $this->datatableColumns();
+                foreach ($this->filterColumn as $index => $filter) {
+                    if ($filter['query']) {
+                        $query->where(function ($query) use ($datatableColumns, $index, $filter) {
+                            call_user_func($datatableColumns[$index]['filter']['query'], $query, $filter['value']);
+                        });
+                    } else if ($filter['type'] == 'text') {
+                        $query->where($filter['key'], config('livewire-datatable.query_wildcard_operator'), "%{$filter['value']}%");
+                    } else {
+                        $query->where($filter['key'], $filter['value']);
                     }
                 }
             });
         });
 
-        $query->when($sortBy, function ($query) use ($sortBy, $sortDirection) {
-            $query->orderBy($sortBy, $sortDirection);
+        // Sort
+        $query->when($this->sortBy, function ($query) {
+            $query->orderBy($this->sortBy, $this->sortDirection);
         });
 
         return $query;

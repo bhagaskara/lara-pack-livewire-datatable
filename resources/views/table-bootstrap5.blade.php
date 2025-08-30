@@ -125,14 +125,28 @@
                 <div class="w-100 h-100" style="background-color: grey; opacity:0.2"></div>
             </div>
             <h5 class="position-absolute shadow bg-white p-2 rounded"
-                style="top: 50%;left: 50%;transform: translate(-50%, -50%);">
-                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Loading...
-            </h5>
+                style="top: 50%;left: 50%;transform: translate(-50%, -50%);">Loading...</h5>
         </div>
 
         <div class="table-responsive">
             <table class="table table-sm table-bordered w-100 h-100 {{ $textWrap ? '' : 'text-nowrap' }}">
                 <thead>
+                    @if (count($filterColumn))
+                        <tr>
+                            @foreach ($columns as $index => $col)
+                                @if (isset($filterColumn[$index]))
+                                    <th>
+                                        @include('lara-pack.livewire-datatable::filter-bootstrap5', [
+                                            'index' => $index,
+                                            'filter' => $filterColumn[$index],
+                                        ])
+                                    </th>
+                                @else
+                                    <th></th>
+                                @endif
+                            @endforeach
+                        </tr>
+                    @endif
                     <tr>
                         @foreach ($columns as $index => $col)
                             @php

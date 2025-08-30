@@ -137,6 +137,22 @@
         <div class="table-responsive">
             <table class="table table-sm table-bordered w-100 h-100 {{ $textWrap ? '' : 'text-nowrap' }}">
                 <thead>
+                    @if (count($filterColumn))
+                        <tr>
+                            @foreach ($columns as $index => $col)
+                                @if (isset($filterColumn[$index]))
+                                    <th>
+                                        @include('lara-pack.livewire-datatable::filter-bootstrap4', [
+                                            'index' => $index,
+                                            'filter' => $filterColumn[$index],
+                                        ])
+                                    </th>
+                                @else
+                                    <th></th>
+                                @endif
+                            @endforeach
+                        </tr>
+                    @endif
                     <tr>
                         @foreach ($columns as $index => $col)
                             @php
