@@ -4,6 +4,8 @@
     "license": "MIT",
     "require": {
         "livewire/livewire": "^3.0",
+        "lara-pack/livewire-select2": "^1.0",
+        "lara-pack/livewire-date-range-picker": "^1.0",
         "barryvdh/laravel-dompdf": "^3.1",
         "maatwebsite/excel": "^3.1"
     },
