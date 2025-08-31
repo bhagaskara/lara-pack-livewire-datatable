@@ -49,10 +49,9 @@ trait WithDatatable
 
     public function mount()
     {
-        $this->datatableMount();
-
         $this->paginationTheme = config('livewire-datatable.pagination_theme');
         $this->textWrap = config('livewire-datatable.table_content_text_wrap');
+        $this->datatableMount();
 
         $columns = $this->datatableColumns();
         foreach ($columns as $indexCol => $col) {
