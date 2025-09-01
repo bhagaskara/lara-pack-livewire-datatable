@@ -32,7 +32,7 @@ trait WithDatatableExport
 
     public function datatableExport($type)
     {
-        $columns = array_filter($this->getColumns(), function ($item) {
+        $columns = array_filter($this->datatableColumns(), function ($item) {
             return !isset($item['export']) || $item['export'] !== false;
         });
 
