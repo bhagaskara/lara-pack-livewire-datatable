@@ -20,24 +20,14 @@ trait WithDatatable
     public $filterGlobal = [];
     public $filterColumn = [];
 
+    // Config : Header
+    public $summary = [];
+
     // Config : View
     public $showKeywordFilter = true;
     public $showSelectPageLength = true;
     public $showTotalData = true;
     public $textWrap = false;
-
-    abstract public function datatableColumns(): array;
-    abstract public function datatableQuery();
-    public function datatableMount() {}
-
-    public function datatableView(): string
-    {
-        if (config('livewire-datatable.theme') == 'bootstrap4') {
-            return 'lara-pack.livewire-datatable::table-bootstrap4';
-        } else {
-            return 'lara-pack.livewire-datatable::table-bootstrap5';
-        }
-    }
 
     public function render()
     {
@@ -51,16 +41,17 @@ trait WithDatatable
     {
         $this->paginationTheme = config('livewire-datatable.pagination_theme');
         $this->textWrap = config('livewire-datatable.table_content_text_wrap');
+
         $this->datatableMount();
 
         $columns = $this->datatableColumns();
         foreach ($columns as $indexCol => $col) {
-            // Default Sort By
+            // Init : Sort 
             if ((!isset($col['sortable']) || $col['sortable']) && empty($this->sortBy)) {
                 $this->sortBy = $col['key'];
             }
 
-            // Init Filter
+            // Init : Filter
             if (!isset($col['searchable']) || $col['searchable']) {
                 // Init Filter : Global
                 if (isset($col['key'])) {
@@ -106,10 +97,66 @@ trait WithDatatable
                     }
                 }
             }
+
+            // Init : Summary
+            if (isset($col['summary']) && is_callable($col['summary'])) {
+                $this->summary[$indexCol] = null;
+            }
+        }
+
+        $this->datatableSummary();
+    }
+
+    /*
+    | DATATABLE: ABSTRACT / OVERIDE
+    */
+    abstract public function datatableColumns(): array;
+    abstract public function datatableQuery();
+    public function datatableMount() {}
+
+    /*
+    | DATATABLE: VIEW
+    */
+    public function datatableView(): string
+    {
+        if (config('livewire-datatable.theme') == 'bootstrap4') {
+            return 'lara-pack.livewire-datatable::table-bootstrap4';
+        } else {
+            return 'lara-pack.livewire-datatable::table-bootstrap5';
         }
     }
 
+    /*
+    | DATATABLE: SUMMARY
+    */
+    public function datatableSummary()
+    {
+        if (count($this->summary) == 0) {
+            return;
+        }
+
+        $query = $this->datatableProcessedQuery();
+        $columns = $this->datatableColumns();
+        foreach ($this->summary as $indexCol => $value) {
+            $this->summary[$indexCol] = call_user_func($columns[$indexCol]['summary'], (clone $query));
+        }
+    }
+
+    /*
+    | DATATABLE: FILTER
+    */
+    public function updatedFilterColumn()
+    {
+        $this->datatableSummary();
+    }
+
     public function updatingSearch()
+    {
+        $this->resetPage();
+        $this->datatableSummary();
+    }
+
+    public function updatingLength()
     {
         $this->resetPage();
     }
@@ -120,10 +167,16 @@ trait WithDatatable
         foreach ($filter as $key => $value) {
             $this->$key = $value;
         }
+        $this->datatableSummary();
     }
 
-    #[On('datatable-refresh')]
-    public function datatableRefresh() {}
+    /*
+    | DATATABLE: QUERY DATA
+    */
+    public function datatableData()
+    {
+        return $this->datatablePaginate($this->datatableProcessedQuery());
+    }
 
     public function datatablePaginate($query)
     {
@@ -182,8 +235,9 @@ trait WithDatatable
         return $query;
     }
 
-    public function datatableData()
-    {
-        return $this->datatablePaginate($this->datatableProcessedQuery());
-    }
+    /*
+    | DATATABLE: LISTENER
+    */
+    #[On('datatable-refresh')]
+    public function datatableRefresh() {}
 }

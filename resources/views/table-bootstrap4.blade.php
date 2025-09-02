@@ -137,6 +137,7 @@
         <div class="table-responsive">
             <table class="table table-sm table-bordered w-100 h-100 {{ $textWrap ? '' : 'text-nowrap' }}">
                 <thead>
+                    {{-- ROW : FILTER --}}
                     @if (count($filterColumn))
                         <tr>
                             @foreach ($columns as $index => $col)
@@ -153,6 +154,8 @@
                             @endforeach
                         </tr>
                     @endif
+
+                    {{-- ROW : HEADER --}}
                     <tr>
                         @foreach ($columns as $index => $col)
                             @php
@@ -287,6 +290,19 @@
                             </th>
                         @endforeach
                     </tr>
+
+                    {{-- ROW : HEADER SUMMARY --}}
+                    @if (count($summary))
+                        <tr>
+                            @foreach ($columns as $index => $col)
+                                @if (isset($summary[$index]))
+                                    <th style='font-style: italic'>{!! $summary[$index] !!}</th>
+                                @else
+                                    <th></th>
+                                @endif
+                            @endforeach
+                        </tr>
+                    @endif
                 </thead>
                 <tbody>
                     @foreach ($data as $index => $item)
