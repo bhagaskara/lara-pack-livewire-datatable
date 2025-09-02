@@ -19,6 +19,7 @@ class LivewireDatatableExport implements FromView, ShouldAutoSize
         public $subtitles,
         public $columns,
         public $data,
+        public $summary,
     ) {}
 
     public function view(): View
@@ -30,6 +31,7 @@ class LivewireDatatableExport implements FromView, ShouldAutoSize
                 'subtitles' => $this->subtitles,
                 'columns' => $this->columns,
                 'data' => $this->data,
+                'summary' => $this->summary,
                 'type' => self::EXPORT_EXCEL,
             ]
         );

@@ -25,13 +25,14 @@
 <body>
     <table class="table-border" style="width: 100%">
         <thead>
+            {{-- TITLE --}}
             <tr>
                 <td colspan="{{ count($columns) }}" style="text-align: center; font-weight: bold;">
                     {{ $title }}
                 </td>
             </tr>
 
-            {{-- FILTER --}}
+            {{-- SUBTITLES --}}
             @foreach ($subtitles as $key => $value)
                 @if ($value)
                     <tr>
@@ -53,6 +54,17 @@
                             {!! $col['name'] !!}
                         </div>
                     </th>
+                @endforeach
+            </tr>
+
+            {{-- SUMMARY --}}
+            <tr>
+                @foreach ($columns as $index => $col)
+                    @if (isset($summary[$index]))
+                        <th style='font-style: italic'>{!! $summary[$index] !!}</th>
+                    @else
+                        <th></th>
+                    @endif
                 @endforeach
             </tr>
         </thead>
@@ -106,7 +118,7 @@
                         @elseif (isset($col['render']) && is_callable($col['render']))
                             <td {!! $cell_class !!} {!! $cell_style !!}>
                                 {!! call_user_func($col['render'], $item, $index, $type) !!}
-                                
+
                             </td>
                         @elseif (isset($col['key']))
                             <td {!! $cell_class !!} {!! $cell_style !!}>

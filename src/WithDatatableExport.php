@@ -42,15 +42,17 @@ trait WithDatatableExport
         $fileName = $this->datatableExportFileName();
         $paperOption = $this->datatableExportPaperOption();
         $view = $this->datatableExportView();
+        $summary = $this->summary;
 
         if ($type == LivewireDatatableExport::EXPORT_EXCEL) {
             return Excel::download(
                 new LivewireDatatableExport(
-                    $view,
-                    $title,
-                    $subtitles,
-                    $columns,
-                    $data
+                    view: $view,
+                    title: $title,
+                    subtitles: $subtitles,
+                    columns: $columns,
+                    data: $data,
+                    summary: $summary,
                 ),
                 "$fileName.xlsx"
             );
@@ -62,6 +64,7 @@ trait WithDatatableExport
                     'subtitles' => $subtitles,
                     'columns' => $columns,
                     'data' => $data,
+                    'summary' => $summary,
                     'type' => $type,
                 ],
             );
