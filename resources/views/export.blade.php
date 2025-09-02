@@ -61,7 +61,13 @@
             <tr>
                 @foreach ($columns as $index => $col)
                     @if (isset($summary[$index]))
-                        <th style='font-style: italic'>{!! $summary[$index] !!}</th>
+                        <th style='font-style: italic'>
+                            @if (isset($columns[$index]['export_summary']) && is_callable($columns[$index]['export_summary']))
+                                {!! call_user_func($columns[$index]['export_summary'], $summary[$index], $type) !!}
+                            @else
+                                {!! $summary[$index] !!}
+                            @endif
+                        </th>
                     @else
                         <th></th>
                     @endif
