@@ -70,7 +70,7 @@ trait WithDatatable
                             'value' => $col['filter']['value'] ?? null,
                             'placeholder' => $col['filter']['placeholder'] ?? 'Cari...',
                             'key' => $col['key'] ?? null,
-                            'query' => $col['filter']['query'] ? true : false,
+                            'query' => isset($col['filter']['query']) ? true : false,
 
                             // Select / Select2
                             'options' => $col['filter']['options'] ?? [],
@@ -218,10 +218,24 @@ trait WithDatatable
                         $query->where(function ($query) use ($datatableColumns, $index, $filter) {
                             call_user_func($datatableColumns[$index]['filter']['query'], $query, $filter['value']);
                         });
-                    } else if ($filter['type'] == 'text') {
-                        $query->where($filter['key'], config('livewire-datatable.query_wildcard_operator'), "%{$filter['value']}%");
                     } else {
-                        $query->where($filter['key'], $filter['value']);
+                        if ($filter['type'] == 'select2') {
+                            // Filter: Select2
+                            if ($filter['value'] === null || !isset($filter['value']['id']) || empty($filter['value']['id'])) {
+                                continue;
+                            }
+                            $query->where($filter['key'], $filter['value']['id']);
+                        } else {
+                            // Filter: Text and Others
+                            if ($filter['value'] === null || $filter['value'] === '') {
+                                continue;
+                            }
+                            if ($filter['type'] == 'text') {
+                                $query->where($filter['key'], config('livewire-datatable.query_wildcard_operator'), "%{$filter['value']}%");
+                            } else {
+                                $query->where($filter['key'], $filter['value']);
+                            }
+                        }
                     }
                 }
             });
