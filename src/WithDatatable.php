@@ -27,6 +27,8 @@ trait WithDatatable
     public $showKeywordFilter = true;
     public $showSelectPageLength = true;
     public $showTotalData = true;
+    public $showTotalDataPosition = 'bottom';
+    public $showTotalDataClass = '';
     public $textWrap = false;
 
     public function render()

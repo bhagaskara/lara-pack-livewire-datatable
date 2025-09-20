@@ -123,6 +123,10 @@
         @endif
     </div>
 
+    @if ($showTotalData && $showTotalDataPosition == 'top')
+        <div class="{{ $showTotalDataClass }}">Total Data: {{ number_format($data->total()) }}</div>
+    @endif
+
     <div class="position-relative">
         <div wire:loading>
             <div class="position-absolute w-100 h-100">
@@ -344,9 +348,9 @@
     </div>
 
     <div class="row justify-content-end mt-3">
-        @if ($showTotalData)
+        @if ($showTotalData && $showTotalDataPosition == 'bottom')
             <div class="col">
-                <em>Total Data: {{ number_format($data->total()) }}</em>
+                <div class="{{ $showTotalDataClass }}">Total Data: {{ number_format($data->total()) }}</div>
             </div>
         @endif
         <div class="col-auto">
