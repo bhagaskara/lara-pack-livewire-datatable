@@ -149,6 +149,7 @@ trait WithDatatable
     */
     public function updatedFilterColumn()
     {
+        $this->resetPage();
         $this->datatableSummary();
     }
 
@@ -169,6 +170,7 @@ trait WithDatatable
         foreach ($filter as $key => $value) {
             $this->$key = $value;
         }
+        $this->resetPage();
         $this->datatableSummary();
     }
 
