@@ -134,7 +134,7 @@
 
         <div class="table-responsive">
             <table class="table table-sm table-bordered w-100 h-100 {{ $textWrap ? '' : 'text-nowrap' }}">
-                <thead>
+                <thead class="position-sticky bg-white top-0 shadow-sm">
                     {{-- ROW : FILTER --}}
                     @if (count($filterColumn))
                         <tr>
