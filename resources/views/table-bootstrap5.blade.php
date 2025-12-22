@@ -132,8 +132,8 @@
                 style="top: 50%;left: 50%;transform: translate(-50%, -50%);">Loading...</h5>
         </div>
 
-        <div class="table-responsive">
-            <table class="table table-sm table-bordered w-100 h-100 {{ $textWrap ? '' : 'text-nowrap' }}" style="max-height:600px;">
+        <div class="table-responsive" style="max-height:600px;">
+            <table class="table table-sm table-bordered w-100 h-100 {{ $textWrap ? '' : 'text-nowrap' }}">
                 <thead class="position-sticky bg-white top-0 shadow-sm">
                     {{-- ROW : FILTER --}}
                     @if (count($filterColumn))
