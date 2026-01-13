@@ -2,6 +2,7 @@
 
 namespace LaraPack\LivewireDatatable;
 
+use Livewire\Attributes\Url;
 use Livewire\WithPagination;
 use Livewire\Attributes\On;
 
@@ -18,6 +19,7 @@ trait WithDatatable
     // Config : Filter
     public $search;
     public $filterGlobal = [];
+    #[Url()]
     public $filterColumn = [];
 
     // Config : Header
@@ -48,7 +50,7 @@ trait WithDatatable
 
         $columns = $this->datatableColumns();
         foreach ($columns as $indexCol => $col) {
-            // Init : Sort 
+            // Init : Sort
             if ((!isset($col['sortable']) || $col['sortable']) && empty($this->sortBy)) {
                 $this->sortBy = $col['key'];
             }
@@ -69,7 +71,7 @@ trait WithDatatable
 
                         $this->filterColumn[$indexCol] = [
                             'type' => $col['filter']['type'],
-                            'value' => $col['filter']['value'] ?? null,
+                            'value' => $this->filterColumn[$indexCol]['value'] ?? $col['filter']['value'] ?? null,
                             'placeholder' => $col['filter']['placeholder'] ?? 'Cari...',
                             'key' => $col['key'] ?? null,
                             'query' => isset($col['filter']['query']) ? true : false,
@@ -86,7 +88,7 @@ trait WithDatatable
 
                         $this->filterColumn[$indexCol] = [
                             'type' => $col['filter'],
-                            'value' => '',
+                            'value' => $this->filterColumn[$indexCol]['value'] ?? '',
                             'placeholder' => 'Cari...',
                             'key' => $col['key'],
                             'query' => false,
@@ -216,9 +218,9 @@ trait WithDatatable
         // Filter : Column
         $query->when(count($this->filterColumn), function ($query) {
             $query->where(function ($query) {
-                $datatableColumns = $this->datatableColumns();
                 foreach ($this->filterColumn as $index => $filter) {
                     if ($filter['query']) {
+                        $datatableColumns = $this->datatableColumns();
                         $query->where(function ($query) use ($datatableColumns, $index, $filter) {
                             call_user_func($datatableColumns[$index]['filter']['query'], $query, $filter['value']);
                         });
@@ -234,6 +236,7 @@ trait WithDatatable
                             if ($filter['value'] === null || $filter['value'] === '') {
                                 continue;
                             }
+
                             if ($filter['type'] == 'text') {
                                 $query->where($filter['key'], config('livewire-datatable.query_wildcard_operator'), "%{$filter['value']}%");
                             } else {
@@ -257,5 +260,7 @@ trait WithDatatable
     | DATATABLE: LISTENER
     */
     #[On('datatable-refresh')]
-    public function datatableRefresh() {}
+    public function datatableRefresh()
+    {
+    }
 }
