@@ -17,6 +17,7 @@ trait WithDatatable
     public $loading = true;
 
     // Config : Filter
+    #[Url()]
     public $search;
     public $filterGlobal = [];
     #[Url()]
@@ -116,7 +117,9 @@ trait WithDatatable
     */
     abstract public function datatableColumns(): array;
     abstract public function datatableQuery();
-    public function datatableMount() {}
+    public function datatableMount()
+    {
+    }
 
     /*
     | DATATABLE: VIEW
