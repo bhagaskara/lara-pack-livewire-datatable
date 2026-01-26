@@ -15,6 +15,7 @@ trait WithDatatable
     public $sortBy = '';
     public $sortDirection = 'asc';
     public $loading = true;
+    public $poll = null;
 
     // Config : Filter
     #[Url()]
@@ -117,9 +118,7 @@ trait WithDatatable
     */
     abstract public function datatableColumns(): array;
     abstract public function datatableQuery();
-    public function datatableMount()
-    {
-    }
+    public function datatableMount() {}
 
     /*
     | DATATABLE: VIEW
@@ -263,7 +262,5 @@ trait WithDatatable
     | DATATABLE: LISTENER
     */
     #[On('datatable-refresh')]
-    public function datatableRefresh()
-    {
-    }
+    public function datatableRefresh() {}
 }

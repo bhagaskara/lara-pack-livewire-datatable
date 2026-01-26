@@ -1,4 +1,4 @@
-<div>
+<div {{ $poll ? 'wire:poll.' . $poll . 's' : '' }}>
     {{-- EXPORT DATA --}}
     @if (isset($showExport) && $showExport)
         <div class="row align-items-center">
