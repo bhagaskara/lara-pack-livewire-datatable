@@ -383,6 +383,36 @@
 
         {{-- MOBILE VIEW : CARDS --}}
         <div class="block md:hidden space-y-4 mt-4">
+            {{-- MOBILE CONTROLS (SORT & PAGINATION) --}}
+            <div class="space-y-3 mb-4">
+                <div class="flex space-x-2">
+                    <div class="w-2/3">
+                        <select wire:model.live="sortBy"
+                            class="block w-full py-2 pl-3 pr-8 text-sm text-gray-900 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 bg-gray-50 shadow-sm">
+                            <option value="">Urutkan Berdasarkan...</option>
+                            @foreach ($columns as $col)
+                                @if (!isset($col['sortable']) || $col['sortable'])
+                                    @if (isset($col['key']))
+                                        <option value="{{ $col['key'] }}">{!! strip_tags($col['name']) !!}</option>
+                                    @endif
+                                @endif
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="w-1/3">
+                        <select wire:model.live="sortDirection"
+                            class="block w-full py-2 pl-3 pr-8 text-sm text-gray-900 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 bg-gray-50 shadow-sm">
+                            <option value="asc">A-Z</option>
+                            <option value="desc">Z-A</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    @if (method_exists($data, 'links'))
+                        {{ $data->links() }}
+                    @endif
+                </div>
+            </div>
             @forelse ($data as $index => $item)
                 <div wire:key="card-{{ $index }}-{{ $item->id ?? '' }}"
                     class="p-0 bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">

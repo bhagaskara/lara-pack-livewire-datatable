@@ -172,13 +172,15 @@
                                     $header_style = "style='{$header_style}'";
                                 }
 
-                                $header_class = '';
+                                $header_class = 'align-middle';
                                 if (isset($col['header_class'])) {
-                                    $header_class = is_callable($col['header_class'])
-                                        ? call_user_func($col['header_class'])
-                                        : $col['header_class'];
-                                    $header_class = "class='{$header_class}'";
+                                    $header_class .=
+                                        ' ' .
+                                        (is_callable($col['header_class'])
+                                            ? call_user_func($col['header_class'])
+                                            : $col['header_class']);
                                 }
+                                $header_class = "class='{$header_class}'";
                             @endphp
                             <th {!! $header_class !!} {!! $header_style !!}
                                 wire:key='datatable_header_{{ $index }}'>
@@ -349,6 +351,34 @@
 
         {{-- MOBILE VIEW : CARDS --}}
         <div class="d-block d-md-none mt-3">
+            {{-- MOBILE CONTROLS (SORT & PAGINATION) --}}
+            <div class="mb-3">
+                <div class="row mb-3">
+                    <div class="col-8 pr-1">
+                        <select wire:model.live="sortBy" class="form-control form-control-sm shadow-sm">
+                            <option value="">Urutkan Berdasarkan...</option>
+                            @foreach ($columns as $col)
+                                @if (!isset($col['sortable']) || $col['sortable'])
+                                    @if (isset($col['key']))
+                                        <option value="{{ $col['key'] }}">{!! strip_tags($col['name']) !!}</option>
+                                    @endif
+                                @endif
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-4 pl-1">
+                        <select wire:model.live="sortDirection" class="form-control form-control-sm shadow-sm">
+                            <option value="asc">A-Z</option>
+                            <option value="desc">Z-A</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    @if (method_exists($data, 'links'))
+                        {{ $data->links() }}
+                    @endif
+                </div>
+            </div>
             @forelse ($data as $index => $item)
                 <div wire:key="card-[{{ $index }}]-{{ $item->id ?? '' }}" class="card mb-3 shadow-sm">
                     <div class="card-body p-3">
