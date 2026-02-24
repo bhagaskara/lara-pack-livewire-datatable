@@ -482,12 +482,11 @@
                                     $cell_class = "class='{$cell_class}'";
                                 }
                             @endphp
-                            <div
-                                class="flex items-start justify-between py-2 border-b border-gray-100 last:border-b-0">
-                                <span
-                                    class="font-semibold text-gray-600 block w-1/3 pr-2">{!! $col['name'] !!}</span>
-                                <div class="text-right flex-1 break-words ml-2 {!! str_replace("class='", '', str_replace("'", '', $cell_class)) !!}"
-                                    {!! $cell_style !!}>
+                            <div class="py-2 border-b border-gray-100 last:border-b-0">
+                                <label
+                                    class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">{!! $col['name'] !!}</label>
+                                <div class="text-sm text-gray-900 break-words overflow-x-auto {!! str_replace("class='", '', str_replace("'", '', $cell_class)) !!}"
+                                    {!! $cell_style !!} style="-webkit-overflow-scrolling: touch;">
                                     @if (isset($col['render']) && is_callable($col['render']))
                                         {!! call_user_func($col['render'], $item, $index) !!}
                                     @elseif (isset($col['key']))
