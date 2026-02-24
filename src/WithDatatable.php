@@ -125,8 +125,11 @@ trait WithDatatable
     */
     public function datatableView(): string
     {
-        if (config('livewire-datatable.theme') == 'bootstrap4') {
+        $theme = config('livewire-datatable.theme');
+        if ($theme == 'bootstrap4') {
             return 'lara-pack.livewire-datatable::table-bootstrap4';
+        } elseif ($theme == 'tailwind') {
+            return 'lara-pack.livewire-datatable::table-tailwind';
         } else {
             return 'lara-pack.livewire-datatable::table-bootstrap5';
         }

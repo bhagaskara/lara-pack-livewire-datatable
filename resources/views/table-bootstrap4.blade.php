@@ -138,9 +138,10 @@
             </h5>
         </div>
 
-        <div class="table-responsive">
+        {{-- DESKTOP VIEW : TABLE --}}
+        <div class="table-responsive d-none d-md-block" style="max-height:600px;">
             <table class="table table-sm table-bordered w-100 h-100 {{ $textWrap ? '' : 'text-nowrap' }}">
-                <thead>
+                <thead class="bg-white shadow-sm" style="position: sticky; top: -1px; z-index: 10;">
                     {{-- ROW : FILTER --}}
                     @if (count($filterColumn))
                         <tr>
@@ -310,7 +311,7 @@
                 </thead>
                 <tbody>
                     @foreach ($data as $index => $item)
-                        <tr>
+                        <tr wire:key="row-{{ $index }}-{{ $item->id ?? '' }}">
                             @foreach ($columns as $col)
                                 @php
                                     $cell_style = '';
@@ -344,6 +345,52 @@
                     @endforeach
                 </tbody>
             </table>
+        </div>
+
+        {{-- MOBILE VIEW : CARDS --}}
+        <div class="d-block d-md-none mt-3">
+            @forelse ($data as $index => $item)
+                <div wire:key="card-[{{ $index }}]-{{ $item->id ?? '' }}" class="card mb-3 shadow-sm">
+                    <div class="card-body p-3">
+                        @foreach ($columns as $col)
+                            @php
+                                $cell_style = '';
+                                if (isset($col['cell_style'])) {
+                                    $cell_style = is_callable($col['cell_style'])
+                                        ? call_user_func($col['cell_style'], $item, $index)
+                                        : $col['cell_style'];
+                                    $cell_style = "style='{$cell_style}'";
+                                }
+
+                                $cell_class = '';
+                                if (isset($col['cell_class'])) {
+                                    $cell_class = is_callable($col['cell_class'])
+                                        ? call_user_func($col['cell_class'], $item, $index)
+                                        : $col['cell_class'];
+                                    $cell_class = "class='{$cell_class}'";
+                                }
+                            @endphp
+                            <div class="d-flex justify-content-between align-items-start border-bottom py-2">
+                                <span class="font-weight-bold text-muted w-50">{!! $col['name'] !!}</span>
+                                <div class="text-right w-50 text-wrap {!! str_replace("class='", '', str_replace("'", '', $cell_class)) !!}"
+                                    {!! $cell_style !!}>
+                                    @if (isset($col['render']) && is_callable($col['render']))
+                                        {!! call_user_func($col['render'], $item, $index) !!}
+                                    @elseif (isset($col['key']))
+                                        {{ $item->{$col['key']} }}
+                                    @endif
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @empty
+                <div class="card shadow-sm">
+                    <div class="card-body text-center text-muted font-italic">
+                        Tidak ada data yang ditemukan.
+                    </div>
+                </div>
+            @endforelse
         </div>
     </div>
 

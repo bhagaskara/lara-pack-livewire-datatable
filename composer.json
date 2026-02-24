@@ -1,30 +1,31 @@
 {
-    "name": "lara-pack/livewire-datatable",
-    "description": "Livewire Component : Datatable",
-    "license": "MIT",
-    "require": {
-        "livewire/livewire": "^3.0",
-        "lara-pack/livewire-select2": "^1.0",
-        "lara-pack/livewire-date-range-picker": "^1.0",
-        "barryvdh/laravel-dompdf": "^3.1",
-        "maatwebsite/excel": "^3.1"
-    },
-    "autoload": {
-        "psr-4": {
-            "LaraPack\\LivewireDatatable\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "Bhagaskara",
-            "email": "bhagaskaraliancer@gmail.com"
-        }
-    ],
-    "extra": {
-        "laravel": {
-            "providers": [
-                "LaraPack\\LivewireDatatable\\LivewireDatatableProvider"
-            ]
-        }
+  "name": "lara-pack/livewire-datatable",
+  "description": "Livewire Component : Datatable",
+  "license": "MIT",
+  "require": {
+    "php": "^8.1",
+    "livewire/livewire": "^3.0 || ^4.0",
+    "lara-pack/livewire-select2": "^1.0",
+    "lara-pack/livewire-date-range-picker": "^1.0",
+    "barryvdh/laravel-dompdf": "^3.1",
+    "maatwebsite/excel": "^3.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "LaraPack\\LivewireDatatable\\": "src/"
     }
+  },
+  "authors": [
+    {
+      "name": "Bhagaskara",
+      "email": "bhagaskaraliancer@gmail.com"
+    }
+  ],
+  "extra": {
+    "laravel": {
+      "providers": [
+        "LaraPack\\LivewireDatatable\\LivewireDatatableProvider"
+      ]
+    }
+  }
 }

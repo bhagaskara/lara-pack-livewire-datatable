@@ -1,13 +1,15 @@
-<div {{ $poll ? 'wire:poll.' . $poll . 's' : '' }}>
+<div {{ $poll ? 'wire:poll.' . $poll . 's' : '' }} class="relative">
     {{-- EXPORT DATA --}}
     @if (isset($showExport) && $showExport)
-        <div class="row align-items-center">
-            <div class="col-auto">
-                <label>Export Data:</label>
+        <div class="flex items-center mb-4 space-x-2">
+            <div class="flex-none">
+                <label class="text-sm font-medium text-gray-700">Export Data:</label>
             </div>
-            <div class="col-auto">
-                <button class="btn btn-light-success btn-sm" wire:click="datatableExport('excel')">
-                    <svg width="16px" height="16px" viewBox="0 0 32 32" fill="#000000">
+            <div class="flex-none">
+                <button
+                    class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-green-700 bg-green-100 border border-transparent rounded hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                    wire:click="datatableExport('excel')">
+                    <svg width="16px" height="16px" viewBox="0 0 32 32" fill="#000000" class="mr-2">
                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                         <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                         <g id="SVGRepo_iconCarrier">
@@ -53,9 +55,12 @@
                     Export Excel
                 </button>
             </div>
-            <div class="col-auto">
-                <button class="btn btn-light-danger btn-sm" wire:click="datatableExport('pdf')">
-                    <svg viewBox="0 0 512 512" xml:space="preserve" width="16px" height="16px" fill="#000000">
+            <div class="flex-none">
+                <button
+                    class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-red-700 bg-red-100 border border-transparent rounded hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                    wire:click="datatableExport('pdf')">
+                    <svg viewBox="0 0 512 512" xml:space="preserve" width="16px" height="16px" fill="#000000"
+                        class="mr-2">
                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                         <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                         <g id="SVGRepo_iconCarrier">
@@ -100,68 +105,83 @@
                 </button>
             </div>
         </div>
-        <hr>
+        <hr class="my-4 border-gray-200">
     @endif
 
     {{-- DATATABLE --}}
-    <div class="row justify-content-between mb-3">
+    <div class="flex flex-col sm:flex-row justify-between mb-4 space-y-3 sm:space-y-0 text-sm">
         @if ($showSelectPageLength)
-            <div class="col-auto mb-3 d-flex align-items-center">
-                <select wire:model.live="length" class="form-select form-select-sm">
+            <div class="flex items-center">
+                <select wire:model.live="length"
+                    class="block w-20 py-1.5 pl-3 pr-8 text-sm text-gray-900 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 bg-gray-50">
                     @foreach ($lengthOptions as $item)
                         <option value="{{ $item }}">{{ $item }}</option>
                     @endforeach
                 </select>
-                <label class='form-label fw-bold ms-2 mb-0 text-nowrap'>Baris Per Lembar</label>
+                <label class='ml-3 font-semibold text-gray-700 whitespace-nowrap'>Baris Per Lembar</label>
             </div>
         @endif
         @if ($showKeywordFilter)
-            <div class="col-sm-6 mb-3 d-flex align-items-center">
-                <label class='form-label fw-bold me-2 mb-0'>Pencarian:</label>
-                <input wire:model.live.debounce.300ms="search" type="text" class="form-control form-control-sm">
+            <div class="flex items-center w-full sm:w-64">
+                <label class='mr-3 font-semibold text-gray-700 whitespace-nowrap'>Pencarian:</label>
+                <input wire:model.live.debounce.300ms="search" type="text"
+                    class="block w-full px-3 py-1.5 text-sm text-gray-900 border border-gray-300 rounded shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-gray-50">
             </div>
         @endif
     </div>
 
     @if ($showTotalData && $showTotalDataPosition == 'top')
-        <div class="{{ $showTotalDataClass }}">Total Data: {{ number_format($data->total()) }}</div>
+        <div class="text-sm font-medium text-gray-700 mb-2 {{ $showTotalDataClass }}">Total Data:
+            {{ number_format($data->total()) }}</div>
     @endif
 
-    <div class="position-relative">
+    <div class="relative">
         <div wire:loading>
-            <div class="position-absolute w-100 h-100">
-                <div class="w-100 h-100" style="background-color: grey; opacity:0.2"></div>
+            <div class="absolute inset-0 z-20">
+                <div class="w-full h-full bg-gray-400 opacity-20 rounded shadow-sm"></div>
             </div>
-            <h5 class="position-absolute shadow bg-white p-2 rounded"
+            <div class="absolute z-30 px-4 py-2 bg-white rounded shadow-md"
                 style="top: 50%;left: 50%;transform: translate(-50%, -50%);">
-                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Loading...
-            </h5>
+                <div class="flex items-center text-sm font-medium text-gray-800">
+                    <svg class="w-4 h-4 mr-2 text-gray-800 animate-spin" xmlns="http://www.w3.org/2000/svg"
+                        fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                            stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                        </path>
+                    </svg>
+                    Loading...
+                </div>
+            </div>
         </div>
 
         {{-- DESKTOP VIEW : TABLE --}}
-        <div class="table-responsive d-none d-md-block" style="max-height:600px;">
-            <table class="table table-sm table-bordered w-100 h-100 {{ $textWrap ? '' : 'text-nowrap' }}">
-                <thead class="position-sticky bg-white top-0 shadow-sm">
+        <div
+            class="hidden md:block overflow-x-auto overflow-y-auto border border-gray-200 rounded max-h-[600px] shadow-sm">
+            <table
+                class="w-full text-sm text-left text-gray-700 border-collapse {{ $textWrap ? 'whitespace-normal' : 'whitespace-nowrap' }}">
+                <thead class="sticky top-0 z-10 bg-white">
                     {{-- ROW : FILTER --}}
                     @if (count($filterColumn))
-                        <tr>
+                        <tr class="border-b border-gray-200 bg-gray-50">
                             @foreach ($columns as $index => $col)
                                 @if (isset($filterColumn[$index]))
-                                    <th>
-                                        @include('lara-pack.livewire-datatable::filter-bootstrap5', [
+                                    <th class="p-2 border-r border-gray-200 last:border-r-0 font-normal min-w-[150px]">
+                                        @include('lara-pack.livewire-datatable::filter-tailwind', [
                                             'index' => $index,
                                             'filter' => $filterColumn[$index],
                                         ])
                                     </th>
                                 @else
-                                    <th></th>
+                                    <th class="p-2 border-r border-gray-200 last:border-r-0 min-w-[150px]"></th>
                                 @endif
                             @endforeach
                         </tr>
                     @endif
 
                     {{-- ROW : HEADER --}}
-                    <tr>
+                    <tr class="shadow-[0_1px_0_0_#e5e7eb]">
                         @foreach ($columns as $index => $col)
                             @php
                                 $header_style = '';
@@ -181,22 +201,24 @@
                                 }
                             @endphp
                             <th {!! $header_class !!} {!! $header_style !!}
-                                wire:key='datatable_header_{{ $index }}'>
+                                wire:key='datatable_header_{{ $index }}'
+                                class="px-3 py-2 border-r border-gray-200 bg-gray-100 last:border-r-0 whitespace-nowrap">
                                 @if (!isset($col['sortable']) || $col['sortable'])
                                     @php
                                         $isSortKey = $col['key'] == $sortBy;
                                         $isSortAscending = $sortDirection == 'asc';
                                     @endphp
-                                    <button type="button" class='btn p-0 m-0'
+                                    <button type="button"
+                                        class='w-full flex items-center justify-between text-left focus:outline-none'
                                         wire:click="datatableSort('{{ $col['key'] }}')">
-                                        <div class="fw-bold align-items-center d-flex">
-                                            <div class='pe-2 text-center'>
+                                        <div class="flex items-center justify-between w-full font-bold">
+                                            <div class='pr-2'>
                                                 {!! $col['name'] !!}
                                             </div>
-                                            <div class="d-flex">
+                                            <div class="flex-none">
                                                 @if ($isSortKey)
                                                     @if ($isSortAscending)
-                                                        <svg fill="#000000" height="16px" width="16px"
+                                                        <svg fill="#000000" height="12px" width="12px"
                                                             viewBox="0 0 301.219 301.219" xml:space="preserve">
                                                             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                             <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
@@ -225,7 +247,7 @@
                                                             </g>
                                                         </svg>
                                                     @else
-                                                        <svg fill="#000000" height="16px" width="16px"
+                                                        <svg fill="#000000" height="12px" width="12px"
                                                             viewBox="0 0 301.219 301.219" xml:space="preserve">
                                                             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                             <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
@@ -255,7 +277,7 @@
                                                         </svg>
                                                     @endif
                                                 @else
-                                                    <svg fill="#BBBBBB" height="16px" width="16px"
+                                                    <svg fill="#D1D5DB" height="12px" width="12px"
                                                         viewBox="0 0 301.219 301.219" xml:space="preserve">
                                                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                         <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
@@ -288,7 +310,7 @@
                                         </div>
                                     </button>
                                 @else
-                                    <div class="fs-6 p-2 text-center">
+                                    <div class="font-bold text-center">
                                         {!! $col['name'] !!}
                                     </div>
                                 @endif
@@ -298,20 +320,23 @@
 
                     {{-- ROW : HEADER SUMMARY --}}
                     @if (count($summary))
-                        <tr>
+                        <tr class="bg-gray-50 border-b border-gray-200">
                             @foreach ($columns as $index => $col)
                                 @if (isset($summary[$index]))
-                                    <th style='font-style: italic'>{!! $summary[$index] !!}</th>
+                                    <th
+                                        class="px-3 py-2 italic font-semibold border-r border-gray-200 last:border-r-0 text-gray-900">
+                                        {!! $summary[$index] !!}</th>
                                 @else
-                                    <th></th>
+                                    <th class="px-3 py-2 border-r border-gray-200 last:border-r-0"></th>
                                 @endif
                             @endforeach
                         </tr>
                     @endif
                 </thead>
-                <tbody>
-                    @foreach ($data as $index => $item)
-                        <tr wire:key="row-{{ $index }}-{{ $item->id ?? '' }}">
+                <tbody class="bg-white">
+                    @forelse ($data as $index => $item)
+                        <tr wire:key="row-{{ $index }}-{{ $item->id ?? '' }}"
+                            class="border-b border-gray-200 hover:bg-gray-50">
                             @foreach ($columns as $col)
                                 @php
                                     $cell_style = '';
@@ -332,26 +357,36 @@
                                 @endphp
 
                                 @if (isset($col['render']) && is_callable($col['render']))
-                                    <td {!! $cell_class !!} {!! $cell_style !!}>
+                                    <td {!! $cell_class !!} {!! $cell_style !!}
+                                        class="px-3 py-2 border-r border-gray-200 last:border-r-0">
                                         {!! call_user_func($col['render'], $item, $index) !!}
                                     </td>
                                 @elseif (isset($col['key']))
-                                    <td {!! $cell_class !!} {!! $cell_style !!}>
+                                    <td {!! $cell_class !!} {!! $cell_style !!}
+                                        class="px-3 py-2 border-r border-gray-200 last:border-r-0">
                                         {{ $item->{$col['key']} }}
                                     </td>
                                 @endif
                             @endforeach
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="{{ count($columns) }}"
+                                class="px-3 py-4 text-center text-gray-500 italic border-b border-gray-200">
+                                Tidak ada data yang ditemukan.
+                            </td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
 
         {{-- MOBILE VIEW : CARDS --}}
-        <div class="d-block d-md-none mt-3">
+        <div class="block md:hidden space-y-4 mt-4">
             @forelse ($data as $index => $item)
-                <div wire:key="card-[{{ $index }}]-{{ $item->id ?? '' }}" class="card mb-3 shadow-sm">
-                    <div class="card-body p-3">
+                <div wire:key="card-{{ $index }}-{{ $item->id ?? '' }}"
+                    class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
+                    <div class="space-y-2">
                         @foreach ($columns as $col)
                             @php
                                 $cell_style = '';
@@ -370,9 +405,12 @@
                                     $cell_class = "class='{$cell_class}'";
                                 }
                             @endphp
-                            <div class="d-flex justify-content-between align-items-start border-bottom py-2">
-                                <span class="fw-bold text-muted w-50">{!! $col['name'] !!}</span>
-                                <div class="text-end w-50 text-wrap {!! str_replace("class='", '', str_replace("'", '', $cell_class)) !!}" {!! $cell_style !!}>
+                            <div
+                                class="flex items-start justify-between py-2 border-b border-gray-100 last:border-b-0">
+                                <span
+                                    class="font-semibold text-gray-600 block w-1/3 pr-2">{!! $col['name'] !!}</span>
+                                <div class="text-right flex-1 break-words ml-2 {!! str_replace("class='", '', str_replace("'", '', $cell_class)) !!}"
+                                    {!! $cell_style !!}>
                                     @if (isset($col['render']) && is_callable($col['render']))
                                         {!! call_user_func($col['render'], $item, $index) !!}
                                     @elseif (isset($col['key']))
@@ -384,23 +422,24 @@
                     </div>
                 </div>
             @empty
-                <div class="card shadow-sm">
-                    <div class="card-body text-center text-muted fst-italic">
-                        Tidak ada data yang ditemukan.
-                    </div>
+                <div class="p-4 text-center text-gray-500 italic bg-white border border-gray-200 rounded-lg shadow-sm">
+                    Tidak ada data yang ditemukan.
                 </div>
             @endforelse
         </div>
     </div>
 
-    <div class="row justify-content-end mt-3">
-        @if ($showTotalData && $showTotalDataPosition == 'bottom')
-            <div class="col">
-                <div class="{{ $showTotalDataClass }}">Total Data: {{ number_format($data->total()) }}</div>
-            </div>
-        @endif
-        <div class="col-auto">
-            {{ $data->links() }}
+    <div class="flex flex-col sm:flex-row justify-between items-center mt-4">
+        <div class="mb-3 sm:mb-0">
+            @if ($showTotalData && $showTotalDataPosition == 'bottom')
+                <div class="text-sm font-medium text-gray-700 {{ $showTotalDataClass }}">Total Data:
+                    {{ number_format($data->total()) }}</div>
+            @endif
+        </div>
+        <div>
+            @if (method_exists($data, 'links'))
+                {{ $data->links() }}
+            @endif
         </div>
     </div>
 </div>

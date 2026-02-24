@@ -87,7 +87,7 @@
                             ) {
                                 if (
                                     $columns[$i]['export_footer_type'] ==
-                                    App\Exports\LivewireDatatableExport::FOOTER_TYPE_SUM
+                                    \LaraPack\LivewireDatatable\LivewireDatatableExport::FOOTER_TYPE_SUM
                                 ) {
                                     if (!isset($columns[$i]['export_footer_value'])) {
                                         $columns[$i]['export_footer_value'] = 0;
