@@ -385,9 +385,26 @@
         <div class="block md:hidden space-y-4 mt-4">
             @forelse ($data as $index => $item)
                 <div wire:key="card-{{ $index }}-{{ $item->id ?? '' }}"
-                    class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
-                    <div class="space-y-2">
-                        @foreach ($columns as $col)
+                    class="p-0 bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+                    <div class="space-y-2 p-4">
+                        @php
+                            $actionColumn = null;
+                            $regularColumns = [];
+                            foreach ($columns as $col) {
+                                $colNameLower = strtolower(strip_tags($col['name']));
+                                if (
+                                    $colNameLower === 'aksi' ||
+                                    $colNameLower === 'action' ||
+                                    $colNameLower === 'tindakan'
+                                ) {
+                                    $actionColumn = $col;
+                                } else {
+                                    $regularColumns[] = $col;
+                                }
+                            }
+                        @endphp
+
+                        @foreach ($regularColumns as $col)
                             @php
                                 $cell_style = '';
                                 if (isset($col['cell_style'])) {
@@ -420,6 +437,24 @@
                             </div>
                         @endforeach
                     </div>
+                    @if ($actionColumn)
+                        @php
+                            $cell_class = '';
+                            if (isset($actionColumn['cell_class'])) {
+                                $cell_class = is_callable($actionColumn['cell_class'])
+                                    ? call_user_func($actionColumn['cell_class'], $item, $index)
+                                    : $actionColumn['cell_class'];
+                            }
+                        @endphp
+                        <div
+                            class="bg-gray-50 border-t border-gray-200 p-3 flex flex-col gap-2 {!! str_replace("class='", '', str_replace("'", '', $cell_class)) !!}">
+                            @if (isset($actionColumn['render']) && is_callable($actionColumn['render']))
+                                {!! call_user_func($actionColumn['render'], $item, $index) !!}
+                            @elseif (isset($actionColumn['key']))
+                                {{ $item->{$actionColumn['key']} }}
+                            @endif
+                        </div>
+                    @endif
                 </div>
             @empty
                 <div class="p-4 text-center text-gray-500 italic bg-white border border-gray-200 rounded-lg shadow-sm">
