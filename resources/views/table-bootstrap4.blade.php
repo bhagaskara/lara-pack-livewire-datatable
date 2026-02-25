@@ -413,7 +413,8 @@
                 </div>
             </div>
             @forelse ($data as $index => $item)
-                <div wire:key="card-[{{ $index }}]-{{ $item->id ?? '' }}" class="card mb-3 shadow-sm">
+                <div wire:key="card-[{{ $index }}]-{{ $item->id ?? '' }}" class="card mb-3 shadow-sm"
+                    style="border: 1px solid #c0c0c0;">
                     <div class="card-body p-3">
                         @php
                             $actionColumn = null;
@@ -484,7 +485,7 @@
                     @endif
                 </div>
             @empty
-                <div class="card shadow-sm">
+                <div class="card shadow-sm" style="border: 1px solid #c0c0c0;">
                     <div class="card-body text-center text-muted font-italic">
                         Tidak ada data yang ditemukan.
                     </div>
