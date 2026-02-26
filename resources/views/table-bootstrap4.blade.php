@@ -313,7 +313,7 @@
                 </thead>
                 <tbody>
                     @foreach ($data as $index => $item)
-                        <tr wire:key="row-{{ $index }}-{{ $item->id ?? '' }}">
+                        <tr wire:key="{{ uniqid('row-') }}">
                             @foreach ($columns as $col)
                                 @php
                                     $cell_style = '';
@@ -413,7 +413,7 @@
                 </div>
             </div>
             @forelse ($data as $index => $item)
-                <div wire:key="card-[{{ $index }}]-{{ $item->id ?? '' }}" class="card mb-3 shadow-sm"
+                <div wire:key="{{ uniqid('card-') }}" class="card mb-3 shadow-sm"
                     style="border: 1px solid #c0c0c0;">
                     <div class="card-body p-3">
                         @php

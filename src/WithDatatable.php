@@ -21,8 +21,9 @@ trait WithDatatable
     #[Url()]
     public $search;
     public $filterGlobal = [];
-    #[Url()]
     public $filterColumn = [];
+    #[Url()]
+    public $filterColumnValues = [];
 
     // Config : Header
     public $summary = [];
@@ -73,7 +74,7 @@ trait WithDatatable
 
                         $this->filterColumn[$indexCol] = [
                             'type' => $col['filter']['type'],
-                            'value' => $this->filterColumn[$indexCol]['value'] ?? $col['filter']['value'] ?? null,
+                            'value' => $this->filterColumnValues[$indexCol] ?? $col['filter']['value'] ?? null,
                             'placeholder' => $col['filter']['placeholder'] ?? 'Cari...',
                             'key' => $col['key'] ?? null,
                             'query' => isset($col['filter']['query']) ? true : false,
@@ -83,6 +84,7 @@ trait WithDatatable
                             'url' => $col['filter']['url'] ?? '',
                             'multiple' => $col['filter']['multiple'] ?? false,
                         ];
+                        $this->filterColumnValues[$indexCol] = $this->filterColumn[$indexCol]['value'];
                     } else {
                         if (!isset($col['key'])) {
                             continue;
@@ -90,7 +92,7 @@ trait WithDatatable
 
                         $this->filterColumn[$indexCol] = [
                             'type' => $col['filter'],
-                            'value' => $this->filterColumn[$indexCol]['value'] ?? '',
+                            'value' => $this->filterColumnValues[$indexCol] ?? '',
                             'placeholder' => 'Cari...',
                             'key' => $col['key'],
                             'query' => false,
@@ -100,6 +102,7 @@ trait WithDatatable
                             'url' => '',
                             'multiple' => false,
                         ];
+                        $this->filterColumnValues[$indexCol] = $this->filterColumn[$indexCol]['value'];
                     }
                 }
             }
@@ -156,6 +159,22 @@ trait WithDatatable
     */
     public function updatedFilterColumn()
     {
+        // Sync filter values to URL-bound property
+        foreach ($this->filterColumn as $index => $filter) {
+            $this->filterColumnValues[$index] = $filter['value'];
+        }
+        $this->resetPage();
+        $this->datatableSummary();
+    }
+
+    public function updatedFilterColumnValues()
+    {
+        // Sync URL-bound values back to filterColumn
+        foreach ($this->filterColumnValues as $index => $value) {
+            if (isset($this->filterColumn[$index])) {
+                $this->filterColumn[$index]['value'] = $value;
+            }
+        }
         $this->resetPage();
         $this->datatableSummary();
     }
