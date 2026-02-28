@@ -147,14 +147,14 @@
                         <tr>
                             @foreach ($columns as $index => $col)
                                 @if (isset($filterColumn[$index]))
-                                    <th>
+                                    <th wire:key="filter-desktop-{{ $index }}">
                                         @include('lara-pack.livewire-datatable::filter-bootstrap5', [
                                             'index' => $index,
                                             'filter' => $filterColumn[$index],
                                         ])
                                     </th>
                                 @else
-                                    <th></th>
+                                    <th wire:key="filter-desktop-empty-{{ $index }}"></th>
                                 @endif
                             @endforeach
                         </tr>
@@ -303,9 +303,10 @@
                         <tr>
                             @foreach ($columns as $index => $col)
                                 @if (isset($summary[$index]))
-                                    <th style='font-style: italic'>{!! $summary[$index] !!}</th>
+                                    <th wire:key="summary-desktop-{{ $index }}" style='font-style: italic'>
+                                        {!! $summary[$index] !!}</th>
                                 @else
-                                    <th></th>
+                                    <th wire:key="summary-desktop-empty-{{ $index }}"></th>
                                 @endif
                             @endforeach
                         </tr>
@@ -370,7 +371,7 @@
                         <div class="card card-body shadow-sm p-3 mb-3">
                             @foreach ($columns as $index => $col)
                                 @if (isset($filterColumn[$index]))
-                                    <div class="mb-3">
+                                    <div wire:key="filter-mobile-{{ $index }}" class="mb-3">
                                         <label
                                             class="form-label text-muted small fw-bold mb-1">{!! strip_tags($col['name']) !!}</label>
                                         @include('lara-pack.livewire-datatable::filter-bootstrap5', [

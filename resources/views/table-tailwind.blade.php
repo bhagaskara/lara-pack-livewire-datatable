@@ -167,14 +167,16 @@
                         <tr class="border-b border-gray-200 bg-gray-50">
                             @foreach ($columns as $index => $col)
                                 @if (isset($filterColumn[$index]))
-                                    <th class="p-2 border-r border-gray-200 last:border-r-0 font-normal min-w-[150px]">
+                                    <th wire:key="filter-desktop-{{ $index }}"
+                                        class="p-2 border-r border-gray-200 last:border-r-0 font-normal min-w-[150px]">
                                         @include('lara-pack.livewire-datatable::filter-tailwind', [
                                             'index' => $index,
                                             'filter' => $filterColumn[$index],
                                         ])
                                     </th>
                                 @else
-                                    <th class="p-2 border-r border-gray-200 last:border-r-0 min-w-[150px]"></th>
+                                    <th wire:key="filter-desktop-empty-{{ $index }}"
+                                        class="p-2 border-r border-gray-200 last:border-r-0 min-w-[150px]"></th>
                                 @endif
                             @endforeach
                         </tr>
@@ -323,11 +325,12 @@
                         <tr class="bg-gray-50 border-b border-gray-200">
                             @foreach ($columns as $index => $col)
                                 @if (isset($summary[$index]))
-                                    <th
+                                    <th wire:key="summary-desktop-{{ $index }}"
                                         class="px-3 py-2 italic font-semibold border-r border-gray-200 last:border-r-0 text-gray-900">
                                         {!! $summary[$index] !!}</th>
                                 @else
-                                    <th class="px-3 py-2 border-r border-gray-200 last:border-r-0"></th>
+                                    <th wire:key="summary-desktop-empty-{{ $index }}"
+                                        class="px-3 py-2 border-r border-gray-200 last:border-r-0"></th>
                                 @endif
                             @endforeach
                         </tr>
@@ -398,7 +401,7 @@
                         class="mt-2 p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
                         @foreach ($columns as $index => $col)
                             @if (isset($filterColumn[$index]))
-                                <div class="mb-3 last:mb-0">
+                                <div wire:key="filter-mobile-{{ $index }}" class="mb-3 last:mb-0">
                                     <label
                                         class="block text-sm font-semibold text-gray-700 mb-1">{!! strip_tags($col['name']) !!}</label>
                                     @include('lara-pack.livewire-datatable::filter-tailwind', [
