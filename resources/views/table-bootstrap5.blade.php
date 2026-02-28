@@ -151,6 +151,7 @@
                                         @include('lara-pack.livewire-datatable::filter-bootstrap5', [
                                             'index' => $index,
                                             'filter' => $filterColumn[$index],
+                                            'keyPrefix' => 'desktop',
                                         ])
                                     </th>
                                 @else
@@ -377,6 +378,7 @@
                                         @include('lara-pack.livewire-datatable::filter-bootstrap5', [
                                             'index' => $index,
                                             'filter' => $filterColumn[$index],
+                                            'keyPrefix' => 'mobile',
                                         ])
                                     </div>
                                 @endif

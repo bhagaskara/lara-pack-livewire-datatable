@@ -29,9 +29,9 @@
     @elseif($filter['type'] == 'select2')
         <livewire:lara-pack.livewire-select2 class='form-select form-select-sm'
             wire:model.live='filterColumn.{{ $index }}.value' placeholder="{{ $filter['placeholder'] }}"
-            :options="$filter['options']" :url="$filter['url']" :multiple="$filter['multiple']" :multipleSelection="$filter['multiple']" :key="'select2_' . $index" />
+            :options="$filter['options']" :url="$filter['url']" :multiple="$filter['multiple']" :multipleSelection="$filter['multiple']" :key="($keyPrefix ?? '') . '_select2_' . $index" />
     @elseif($filter['type'] == 'date-range-picker')
         <livewire:lara-pack.livewire-date-range-picker class='form-control form-control-sm'
-            wire:model.live='filterColumn.{{ $index }}.value' :key="'date-range-picker_' . $index" />
+            wire:model.live='filterColumn.{{ $index }}.value' :key="($keyPrefix ?? '') . '_date-range-picker_' . $index" />
     @endif
 </div>

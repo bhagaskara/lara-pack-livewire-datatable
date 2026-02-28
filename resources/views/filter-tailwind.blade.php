@@ -31,10 +31,10 @@
     @elseif($filter['type'] == 'select2')
         <livewire:lara-pack.livewire-select2 class='block w-full text-sm'
             wire:model.live='filterColumn.{{ $index }}.value' placeholder="{{ $filter['placeholder'] }}"
-            :options="$filter['options']" :url="$filter['url']" :multiple="$filter['multiple']" :multipleSelection="$filter['multiple']" :key="'select2_' . $index" />
+            :options="$filter['options']" :url="$filter['url']" :multiple="$filter['multiple']" :multipleSelection="$filter['multiple']" :key="($keyPrefix ?? '') . '_select2_' . $index" />
     @elseif($filter['type'] == 'date-range-picker')
         <livewire:lara-pack.livewire-date-range-picker
             class='block w-full py-1.5 px-2 text-sm text-gray-900 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500'
-            wire:model.live='filterColumn.{{ $index }}.value' :key="'date-range-picker_' . $index" />
+            wire:model.live='filterColumn.{{ $index }}.value' :key="($keyPrefix ?? '') . '_date-range-picker_' . $index" />
     @endif
 </div>

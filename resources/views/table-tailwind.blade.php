@@ -172,6 +172,7 @@
                                         @include('lara-pack.livewire-datatable::filter-tailwind', [
                                             'index' => $index,
                                             'filter' => $filterColumn[$index],
+                                            'keyPrefix' => 'desktop',
                                         ])
                                     </th>
                                 @else
@@ -407,6 +408,7 @@
                                     @include('lara-pack.livewire-datatable::filter-tailwind', [
                                         'index' => $index,
                                         'filter' => $filterColumn[$index],
+                                        'keyPrefix' => 'mobile',
                                     ])
                                 </div>
                             @endif
