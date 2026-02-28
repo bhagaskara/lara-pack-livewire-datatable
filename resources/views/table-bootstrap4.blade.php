@@ -141,10 +141,11 @@
         {{-- DESKTOP VIEW : TABLE --}}
         <div class="table-responsive d-none d-md-block" style="max-height:600px;">
             <table class="table table-sm table-bordered w-100 h-100 {{ $textWrap ? '' : 'text-nowrap' }}">
-                <thead class="bg-white shadow-sm" style="position: sticky; top: -1px; z-index: 10;">
+                <thead wire:key="desktop-thead" class="bg-white shadow-sm"
+                    style="position: sticky; top: -1px; z-index: 10;">
                     {{-- ROW : FILTER --}}
                     @if (count($filterColumn))
-                        <tr>
+                        <tr wire:key="desktop-filter-row">
                             @foreach ($columns as $index => $col)
                                 @if (isset($filterColumn[$index]))
                                     <th wire:key="filter-desktop-{{ $index }}">
@@ -162,7 +163,7 @@
                     @endif
 
                     {{-- ROW : HEADER --}}
-                    <tr>
+                    <tr wire:key="desktop-header-row">
                         @foreach ($columns as $index => $col)
                             @php
                                 $header_style = '';
@@ -301,7 +302,7 @@
 
                     {{-- ROW : HEADER SUMMARY --}}
                     @if (count($summary))
-                        <tr>
+                        <tr wire:key="desktop-summary-row">
                             @foreach ($columns as $index => $col)
                                 @if (isset($summary[$index]))
                                     <th wire:key="summary-desktop-{{ $index }}" style='font-style: italic'>
@@ -313,7 +314,7 @@
                         </tr>
                     @endif
                 </thead>
-                <tbody>
+                <tbody wire:key="desktop-tbody">
                     @foreach ($data as $index => $item)
                         <tr wire:key="{{ uniqid('row-') }}">
                             @foreach ($columns as $col)

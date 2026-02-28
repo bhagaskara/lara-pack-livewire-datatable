@@ -1,4 +1,4 @@
-<div>
+<div wire:key="filter-wrapper-{{ $keyPrefix ?? 'default' }}-{{ $index }}">
     @if (
         $filter['type'] == 'text' ||
             $filter['type'] == 'number' ||

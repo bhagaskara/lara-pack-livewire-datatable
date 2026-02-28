@@ -161,10 +161,10 @@
             class="hidden md:block overflow-x-auto overflow-y-auto border border-gray-200 rounded max-h-[600px] shadow-sm">
             <table
                 class="w-full text-sm text-left text-gray-700 border-collapse {{ $textWrap ? 'whitespace-normal' : 'whitespace-nowrap' }}">
-                <thead class="sticky top-0 z-10 bg-white">
+                <thead wire:key="desktop-thead" class="sticky top-0 z-10 bg-white">
                     {{-- ROW : FILTER --}}
                     @if (count($filterColumn))
-                        <tr class="border-b border-gray-200 bg-gray-50">
+                        <tr wire:key="desktop-filter-row" class="border-b border-gray-200 bg-gray-50">
                             @foreach ($columns as $index => $col)
                                 @if (isset($filterColumn[$index]))
                                     <th wire:key="filter-desktop-{{ $index }}"
@@ -184,7 +184,7 @@
                     @endif
 
                     {{-- ROW : HEADER --}}
-                    <tr class="shadow-[0_1px_0_0_#e5e7eb]">
+                    <tr wire:key="desktop-header-row" class="shadow-[0_1px_0_0_#e5e7eb]">
                         @foreach ($columns as $index => $col)
                             @php
                                 $header_style = '';
@@ -323,7 +323,7 @@
 
                     {{-- ROW : HEADER SUMMARY --}}
                     @if (count($summary))
-                        <tr class="bg-gray-50 border-b border-gray-200">
+                        <tr wire:key="desktop-summary-row" class="bg-gray-50 border-b border-gray-200">
                             @foreach ($columns as $index => $col)
                                 @if (isset($summary[$index]))
                                     <th wire:key="summary-desktop-{{ $index }}"
@@ -337,7 +337,7 @@
                         </tr>
                     @endif
                 </thead>
-                <tbody class="bg-white">
+                <tbody wire:key="desktop-tbody" class="bg-white">
                     @forelse ($data as $index => $item)
                         <tr wire:key="{{ uniqid('row-') }}" class="border-b border-gray-200 hover:bg-gray-50">
                             @foreach ($columns as $col)
