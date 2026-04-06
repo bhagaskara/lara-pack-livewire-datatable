@@ -139,7 +139,7 @@
         </div>
 
         {{-- DESKTOP VIEW : TABLE --}}
-        <div class="table-responsive d-none d-md-block" style="max-height:600px;">
+        <div class="table-responsive {{ $mobileResponsive ? 'd-none d-md-block' : 'd-block' }}" style="max-height:600px;">
             <table class="table table-sm table-bordered w-100 h-100 {{ $textWrap ? '' : 'text-nowrap' }}">
                 <thead wire:key="desktop-thead" class="position-sticky bg-white top-0 shadow-sm">
                     {{-- ROW : FILTER --}}
@@ -352,7 +352,7 @@
         </div>
 
         {{-- MOBILE VIEW : CARDS --}}
-        <div class="d-block d-md-none mt-3">
+        <div class="{{ $mobileResponsive ? 'd-block d-md-none' : 'd-none' }} mt-3">
             {{-- MOBILE FILTER --}}
             @if (count($filterColumn))
                 <div class="mb-3">

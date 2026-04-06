@@ -35,6 +35,7 @@ trait WithDatatable
     public $showTotalDataPosition = 'bottom';
     public $showTotalDataClass = '';
     public $textWrap = false;
+    public $mobileResponsive = true;
 
     public function render()
     {
@@ -48,6 +49,7 @@ trait WithDatatable
     {
         $this->paginationTheme = config('livewire-datatable.pagination_theme');
         $this->textWrap = config('livewire-datatable.table_content_text_wrap');
+        $this->mobileResponsive = config('livewire-datatable.mobile_responsive', true);
 
         $this->datatableMount();
 

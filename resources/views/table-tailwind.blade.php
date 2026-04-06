@@ -158,7 +158,7 @@
 
         {{-- DESKTOP VIEW : TABLE --}}
         <div
-            class="hidden md:block overflow-x-auto overflow-y-auto border border-gray-200 rounded max-h-[600px] shadow-sm">
+            class="{{ $mobileResponsive ? 'hidden md:block' : 'block' }} overflow-x-auto overflow-y-auto border border-gray-200 rounded max-h-[600px] shadow-sm">
             <table
                 class="w-full text-sm text-left text-gray-700 border-collapse {{ $textWrap ? 'whitespace-normal' : 'whitespace-nowrap' }}">
                 <thead wire:key="desktop-thead" class="sticky top-0 z-10 bg-white">
@@ -385,7 +385,7 @@
         </div>
 
         {{-- MOBILE VIEW : CARDS --}}
-        <div class="block md:hidden space-y-4 mt-4">
+        <div class="{{ $mobileResponsive ? 'block md:hidden' : 'hidden' }} space-y-4 mt-4">
             {{-- MOBILE FILTER --}}
             @if (count($filterColumn))
                 <div x-data="{ openFilter: false }" class="mb-4">
